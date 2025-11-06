@@ -1,7 +1,7 @@
-package main.java.com.shippingapp.dao;
+package com.shippingapp.dao;
 
-import main.java.com.shippingapp.model.Ship;
-import main.java.com.shippingapp.util.DBUtil;
+import com.shippingapp.model.Ship;
+import com.shippingapp.util.DBUtil;
 
 import java.sql.*;
 import java.util.ArrayList;

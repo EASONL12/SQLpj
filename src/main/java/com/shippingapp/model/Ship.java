@@ -1,4 +1,4 @@
-package main.java.com.shippingapp.model;
+package com.shippingapp.model;
 
 public class Ship {
     private int shipId;

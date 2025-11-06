@@ -1,4 +1,4 @@
-package main.java.com.shippingapp.util;
+package com.shippingapp.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

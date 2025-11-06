@@ -1,7 +1,7 @@
-package main.java.com.shippingapp.ui.panels;
+package com.shippingapp.ui.panels;
 
-import main.java.com.shippingapp.dao.ShipDAO;
-import main.java.com.shippingapp.model.Ship;
+import com.shippingapp.dao.ShipDAO;
+import com.shippingapp.model.Ship;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

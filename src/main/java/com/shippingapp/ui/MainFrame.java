@@ -1,28 +1,22 @@
-package main.java.com.shippingapp.ui;
-
-import main.java.com.shippingapp.ui.panels.ShipPanel;
+package com.shippingapp.ui;
 
 import javax.swing.*;
+import java.awt.*;
+import com.shippingapp.ui.panels.DashboardPanel;
+import com.shippingapp.ui.panels.ShipPanel;
 
 public class MainFrame extends JFrame {
-
-    private JTabbedPane tabbedPane;
-
     public MainFrame() {
         setTitle("航线与船舶管理系统");
-        setSize(800, 600);
-        setLocationRelativeTo(null); // 窗口居中
+        setSize(1000, 700);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        tabbedPane = new JTabbedPane();
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("首页", new DashboardPanel());
+        tabbedPane.addTab("船舶管理", new ShipPanel());
+        // 后续添加：航线、航次、船员、报表等
 
-        // 添加船舶管理模块
-        ShipPanel shipPanel = new ShipPanel();
-        tabbedPane.addTab("船舶管理", shipPanel);
-
-        // 这里可以后续加入其他模块，比如 RoutePanel、VoyagePanel...
-        // tabbedPane.addTab("航线管理", new RoutePanel());
-
-        add(tabbedPane);
+        add(tabbedPane, BorderLayout.CENTER);
     }
 }

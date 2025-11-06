@@ -1,4 +1,4 @@
-package main.java.com.shippingapp.dao;
+package com.shippingapp.dao;
 
 public class VoyageDAO {
 }
