@@ -2,11 +2,10 @@ package com.shippingapp.ui.panels;
 
 import com.shippingapp.model.Voyage;
 import com.shippingapp.dao.VoyageDAO;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +28,10 @@ public class VoyagePanel extends JPanel {
         // 创建选项卡
         tabbedPane = new JTabbedPane();
 
-        // 选项卡1：所有航次
+        // 所有航次
         tabbedPane.addTab("所有航次", createAllVoyagesPanel());
 
-        // 选项卡2：历史航次
+        // 历史航次
         tabbedPane.addTab("历史航次", createHistoryVoyagesPanel());
 
         add(tabbedPane, BorderLayout.CENTER);
@@ -41,13 +40,14 @@ public class VoyagePanel extends JPanel {
     private JPanel createAllVoyagesPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // 顶部按钮面板
+        // 顶部按钮
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addButton = new JButton("安排新航次");
         JButton refreshButton = new JButton("刷新");
-
+        JButton updateArrivalButton = new JButton("设置实际到港时间"); // 新增按钮
         topPanel.add(addButton);
         topPanel.add(refreshButton);
+        topPanel.add(updateArrivalButton);
 
         // 表格
         String[] columnNames = {"航次ID", "船舶", "船舶类型", "航线", "计划离港", "计划到港", "实际到港"};
@@ -67,6 +67,8 @@ public class VoyagePanel extends JPanel {
         // 事件监听
         addButton.addActionListener(e -> showAddVoyageDialog());
         refreshButton.addActionListener(e -> loadVoyages());
+
+        updateArrivalButton.addActionListener(e -> updateActualArrivalTime()); // 设置实际到港
 
         return panel;
     }
@@ -136,7 +138,6 @@ public class VoyagePanel extends JPanel {
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new GridLayout(5, 2, 10, 10));
 
-        // 表单组件
         dialog.add(new JLabel("选择船舶:"));
         JComboBox<String> shipComboBox = new JComboBox<>();
         dialog.add(shipComboBox);
@@ -158,7 +159,6 @@ public class VoyagePanel extends JPanel {
         dialog.add(saveButton);
         dialog.add(cancelButton);
 
-        // 加载数据
         loadShipsToComboBox(shipComboBox);
         loadRoutesToComboBox(routeComboBox);
 
@@ -221,6 +221,39 @@ public class VoyagePanel extends JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "输入格式错误: " + ex.getMessage());
             return false;
+        }
+    }
+
+    // 新增方法：更新实际到港时间
+    private void updateActualArrivalTime() {
+        int selectedRow = voyageTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "请选择一条航次记录！");
+            return;
+        }
+
+        int voyageId = (int) tableModel.getValueAt(selectedRow, 0);
+        String currentArrival = (String) tableModel.getValueAt(selectedRow, 6);
+
+        String input = JOptionPane.showInputDialog(this,
+                "请输入实际到港时间（yyyy-MM-dd HH:mm）:",
+                currentArrival.equals("未到达") ? "" : currentArrival);
+
+        if (input == null || input.trim().isEmpty()) return;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date actualArrival = sdf.parse(input);
+
+            if (voyageDAO.updateActualArrivalTime(voyageId, actualArrival)) {
+                JOptionPane.showMessageDialog(this, "更新成功！");
+                loadVoyages(); // 刷新表格
+            } else {
+                JOptionPane.showMessageDialog(this, "更新失败！");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "时间格式错误！");
         }
     }
 }

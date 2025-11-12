@@ -2,16 +2,17 @@ package com.shippingapp.dao;
 
 import com.shippingapp.model.Voyage;
 import com.shippingapp.util.DBUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class VoyageDAO {
 
-    // 安排新航次
+    // 新增航次
     public boolean addVoyage(Voyage voyage) {
         String sql = "INSERT INTO Voyage (ship_id, route_id, departure_time, arrival_time) VALUES (?, ?, ?, ?)";
-
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -45,8 +46,7 @@ public class VoyageDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Voyage voyage = extractVoyageFromResultSet(rs);
-                voyages.add(voyage);
+                voyages.add(extractVoyageFromResultSet(rs));
             }
 
         } catch (SQLException e) {
@@ -55,7 +55,7 @@ public class VoyageDAO {
         return voyages;
     }
 
-    // 获取历史航次（已完成的）
+    // 获取历史航次（已完成）
     public List<Voyage> getHistoryVoyages() {
         List<Voyage> voyages = new ArrayList<>();
         String sql = "SELECT v.*, s.name as ship_name, s.type as ship_type, " +
@@ -73,8 +73,7 @@ public class VoyageDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Voyage voyage = extractVoyageFromResultSet(rs);
-                voyages.add(voyage);
+                voyages.add(extractVoyageFromResultSet(rs));
             }
 
         } catch (SQLException e) {
@@ -93,12 +92,11 @@ public class VoyageDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String[] ship = {
+                ships.add(new String[]{
                         String.valueOf(rs.getInt("ship_id")),
                         rs.getString("name"),
                         rs.getString("type")
-                };
-                ships.add(ship);
+                });
             }
 
         } catch (SQLException e) {
@@ -120,12 +118,11 @@ public class VoyageDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String[] route = {
+                routes.add(new String[]{
                         String.valueOf(rs.getInt("route_id")),
                         rs.getString("start_port") + " → " + rs.getString("end_port"),
                         rs.getString("distance") + "公里"
-                };
-                routes.add(route);
+                });
             }
 
         } catch (SQLException e) {
@@ -150,7 +147,6 @@ public class VoyageDAO {
 
             pstmt.setInt(1, voyageId);
             ResultSet rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 return extractVoyageFromResultSet(rs);
             }
@@ -161,6 +157,24 @@ public class VoyageDAO {
         return null;
     }
 
+    // 更新实际到港时间
+    public boolean updateActualArrivalTime(int voyageId, Date actualArrival) {
+        String sql = "UPDATE Voyage SET actual_arrival_time = ? WHERE voyage_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setTimestamp(1, new Timestamp(actualArrival.getTime()));
+            pstmt.setInt(2, voyageId);
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 工具方法：从 ResultSet 封装 Voyage 对象
     private Voyage extractVoyageFromResultSet(ResultSet rs) throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setVoyageId(rs.getInt("voyage_id"));
@@ -170,7 +184,6 @@ public class VoyageDAO {
         voyage.setArrivalTime(rs.getTimestamp("arrival_time"));
         voyage.setActualArrivalTime(rs.getTimestamp("actual_arrival_time"));
 
-        // 关联信息
         voyage.setShipName(rs.getString("ship_name"));
         voyage.setShipType(rs.getString("ship_type"));
         voyage.setDeparturePort(rs.getString("departure_port"));

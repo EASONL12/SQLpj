@@ -19,7 +19,7 @@ public class Voyage {
 
     public Voyage() {}
 
-    // getter 和 setter 方法
+    // getter 和 setter
     public int getVoyageId() { return voyageId; }
     public void setVoyageId(int voyageId) { this.voyageId = voyageId; }
 
