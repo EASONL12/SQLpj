@@ -2,11 +2,8 @@ package com.shippingapp.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import com.shippingapp.ui.panels.DashboardPanel;
-import com.shippingapp.ui.panels.ShipPanel;
-import com.shippingapp.ui.panels.VoyagePanel;
-import com.shippingapp.ui.panels.CrewPanel;
-import com.shippingapp.ui.panels.CrewAssignmentPanel;
+
+import com.shippingapp.ui.panels.*;
 
 public class MainFrame extends JFrame {
 
@@ -24,6 +21,7 @@ public class MainFrame extends JFrame {
 
         // 船员分配面板直接使用无参构造
         tabbedPane.addTab("船员分配", new CrewAssignmentPanel());
+        tabbedPane.addTab("报表统计", new ReportPanel());
 
         add(tabbedPane, BorderLayout.CENTER);
     }
