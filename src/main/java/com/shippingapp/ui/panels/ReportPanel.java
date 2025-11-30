@@ -29,7 +29,7 @@ public class ReportPanel extends JPanel {
         routeTable = new JTable();
         crewTable = new JTable();
 
-        tabbedPane.addTab("船舶利用率", createShipUsagePanel());
+        tabbedPane.addTab("船舶次数", createShipUsagePanel());
         tabbedPane.addTab("航线执行", createRouteExecutionPanel());
         tabbedPane.addTab("船员出勤", createCrewAttendancePanel());
 
