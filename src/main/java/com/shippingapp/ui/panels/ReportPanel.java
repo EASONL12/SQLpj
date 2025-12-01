@@ -29,7 +29,7 @@ public class ReportPanel extends JPanel {
         routeTable = new JTable();
         crewTable = new JTable();
 
-        tabbedPane.addTab("船舶次数", createShipUsagePanel());
+        tabbedPane.addTab("船舶利用率", createShipUsagePanel());
         tabbedPane.addTab("航线执行", createRouteExecutionPanel());
         tabbedPane.addTab("船员出勤", createCrewAttendancePanel());
 
@@ -55,9 +55,7 @@ public class ReportPanel extends JPanel {
     private void loadShipData() {
         shipModel.setRowCount(0); // 清空表格
         try (Connection conn = DBUtil.getConnection()) {
-            String sql = "SELECT s.ship_id, s.name, COUNT(v.voyage_id) AS voyage_count " +
-                    "FROM Ship s LEFT JOIN Voyage v ON s.ship_id=v.ship_id " +
-                    "GROUP BY s.ship_id, s.name";
+            String sql = "SELECT * FROM ShipUtilizationView";  // 使用视图
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
@@ -70,6 +68,7 @@ public class ReportPanel extends JPanel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "加载船舶利用率数据失败：" + e.getMessage());
         }
     }
 
@@ -92,12 +91,7 @@ public class ReportPanel extends JPanel {
     private void loadRouteData() {
         routeModel.setRowCount(0);
         try (Connection conn = DBUtil.getConnection()) {
-            String sql = "SELECT r.route_id, sp.name AS start_port, ep.name AS end_port, COUNT(v.voyage_id) AS execute_count " +
-                    "FROM Route r " +
-                    "LEFT JOIN Port sp ON r.start_port_id=sp.port_id " +
-                    "LEFT JOIN Port ep ON r.end_port_id=ep.port_id " +
-                    "LEFT JOIN Voyage v ON r.route_id=v.route_id " +
-                    "GROUP BY r.route_id, sp.name, ep.name";
+            String sql = "SELECT * FROM RouteExecutionView";  // 使用视图
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
@@ -111,6 +105,7 @@ public class ReportPanel extends JPanel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "加载航线执行数据失败：" + e.getMessage());
         }
     }
 
@@ -133,9 +128,7 @@ public class ReportPanel extends JPanel {
     private void loadCrewData() {
         crewModel.setRowCount(0);
         try (Connection conn = DBUtil.getConnection()) {
-            String sql = "SELECT c.crew_id, c.name, c.role, COUNT(vc.voyage_id) AS attendance_count " +
-                    "FROM Crew c LEFT JOIN Voyage_Crew vc ON c.crew_id=vc.crew_id " +
-                    "GROUP BY c.crew_id, c.name, c.role";
+            String sql = "SELECT * FROM CrewAttendanceView";  // 使用视图
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
@@ -149,6 +142,7 @@ public class ReportPanel extends JPanel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "加载船员出勤数据失败：" + e.getMessage());
         }
     }
 
