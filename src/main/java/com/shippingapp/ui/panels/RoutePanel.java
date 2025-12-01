@@ -76,7 +76,7 @@ public class RoutePanel extends JPanel {
                     refreshTable();
                     JOptionPane.showMessageDialog(this, "添加成功！");
                 } else {
-                    JOptionPane.showMessageDialog(this, "添加失败！");
+                    JOptionPane.showMessageDialog(this, "添加失败！港口不存在");
                 }
             } catch (RuntimeException e) {
                 throw new RuntimeException(e);
