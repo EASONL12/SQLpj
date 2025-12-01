@@ -6,7 +6,6 @@ import com.shippingapp.model.Ship;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.List;
 
 public class ShipPanel extends JPanel {
@@ -82,7 +81,7 @@ public class ShipPanel extends JPanel {
                     JOptionPane.showMessageDialog(this, "添加失败！");
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "载重必须是数字！");
+                JOptionPane.showMessageDialog(this, "载重必须为数字!");
             }
         }
     }

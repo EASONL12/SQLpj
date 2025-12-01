@@ -16,8 +16,11 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("首页", new DashboardPanel());
         tabbedPane.addTab("船舶管理", new ShipPanel());
+        tabbedPane.addTab("港口管理", new PortPanel());
+        tabbedPane.addTab("航线管理", new RoutePanel());
         tabbedPane.addTab("航次管理", new VoyagePanel());
         tabbedPane.addTab("船员管理", new CrewPanel());
+
 
         // 船员分配面板直接使用无参构造
         tabbedPane.addTab("船员分配", new CrewAssignmentPanel());

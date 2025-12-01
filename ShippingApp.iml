@@ -11,16 +11,17 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" />
+          <root url="file:///Users/download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../../../download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" />
+          <root url="file:///Users/download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../../../download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../../../download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" recursive="false" type="SOURCES" />
+        <jarDirectory url="file:///Users/download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" recursive="false" />
+        <jarDirectory url="file:///Users/download/sqljdbc_13.2.1.0_chs/sqljdbc_13.2/chs/jars" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="library" name="mssql-jdbc-13.2.1.jre8" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-9.3.0" level="project" />
   </component>
 </module>
